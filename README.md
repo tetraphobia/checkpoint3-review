@@ -68,3 +68,46 @@ In the context of this Garage, everything inside is treated as a `Vehicle`. What
 
 - Polymorphism is demonstrated by the way the child classes create and return their respective objects. The `PlaneFactory` class creates a `Plane` object, but returns it as a `Vehicle` object. This is valid, because `Plane` is a child of `Vehicle`, so it can be treated as one for the purpose of storing it in an `ArrayList` that can only hold vehicles, or calling `Vehicle` methods. If you're trying to call a method that a child class has, but the parent class doesn't, you need to type cast the object as the child class.
 - Abstraction is also demonstrated here. The method `createVehicle` will always return a `Vehicle`. How the individual class implements that method, or even the kind of `Vehicle` it returns does not matter. All that matters to someone using a child of your abstract class is the method name, the arguments, and the type it returns.
+
+## Step 4, User Input
+
+What if we want the user to specify what kind of vehicle it is, along with its make and model, before adding it to the garage? We implement a command line interface!
+
+Example interface:
+```
+Welcome to the garage!
+
+1. Add a new vehicle
+2. Examine the garage
+3. Quit
+
+> 1
+
+What kind of vehicle is this?
+
+1. Car
+2. Boat
+3. Plane
+
+> 3
+
+Enter the make: Mitsubishi
+Enter the model: A6M
+
+Your Mitsubishi A6M has been stored in the garage!
+
+1. Add a new vehicle
+2. Examine the garage
+3. Quit
+
+> 2
+
+...
+```
+
+... And so on.
+
+- Implement a command line interface similar to the example interface in the `main` method of the `Garage` class.
+  - Add a new vehicle should add the correct type of Vehicle object to the garage.
+  - Examining the garage should call the `Garage.examine()` method.
+- For creating the vehicles, you can use the `createVehicle` methods in the factory objects, or just use the constructor for the children of the `Vehicle` class.

@@ -1,4 +1,7 @@
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Garage {
     private int maxVehicles;
@@ -36,6 +39,7 @@ public class Garage {
 
     public void examine() {
         System.out.println("You look into the garage... You find:\n");
+
         for (Vehicle v : this.vehicles) {
             System.out.println("a " + v.getDescription());
             v.travel();
@@ -48,21 +52,88 @@ public class Garage {
     }
 
     public static void main(String[] args) {
-        Garage a = new Garage(5);
+        Garage myGarage = new Garage(5);
+        Scanner scan = new Scanner(System.in);
 
-        ArrayList<VehicleFactory> factories = new ArrayList<>();
+        while (true) {
 
-        factories.add(new CarFactory());
-        factories.add(new PlaneFactory());
-        factories.add(new BoatFactory());
+            System.out.println("Welcome to the garage!\n");
+            System.out.println("1. Add a new vehicle");
+            System.out.println("2. Examine the garage");
+            System.out.println("3. Quit\n");
 
-        // { CarFactory, PlaneFactory, BoatFactory }
+            System.out.print("> ");
 
-        for (VehicleFactory v : factories) {
-            a.addVehicle(v.createVehicle("Mystery", "Mystery"));
+            int choice = -1;
+
+            try {
+                choice = scan.nextInt();
+            } catch (InputMismatchException e) {
+                System.err.println("Try again.");
+                continue;
+            } finally {
+                scan.nextLine();
+            }
+
+            if (choice == 1) { // 1. Add a new vehicle
+                System.out.println("What kind of vehicle is this?\n");
+                System.out.println("1. Car");
+                System.out.println("2. Boat");
+                System.out.println("3. Plane\n");
+
+                System.out.print("> ");
+
+                int kind = -1;
+                String make = null;
+                String model = null;
+
+                try {
+                    kind = scan.nextInt();
+                } catch (InputMismatchException e) {
+                    System.err.println("Try again.");
+                    continue;
+                } finally {
+                    scan.nextLine();
+                }
+
+                if (kind < 1 || kind > 3) {
+                    System.err.println(kind + " is not a valid kind of vehicle. Try again.");
+                    continue;
+                }
+
+                try {
+                    System.out.print("Enter the make: ");
+                    make = scan.nextLine();
+                    System.out.print("Enter the model: ");
+                    model = scan.nextLine();
+                } catch (InputMismatchException e) {
+                    System.err.println("Try again.");
+                    continue;
+                }
+
+                switch (kind) {
+                    case 1:
+                        myGarage.addVehicle(new Car(make, model));
+                        break;
+                    case 2:
+                        myGarage.addVehicle(new Boat(make, model));
+                        break;
+                    case 3:
+                        myGarage.addVehicle(new Plane(make, model));
+                        break;
+                    default:
+                        System.out.println("Something has gone horribly wrong!");
+                        break;
+                }
+
+            }
+            else if (choice == 2) { // 2. Examine the garage
+                myGarage.examine();
+            }
+            else if (choice == 3) { // 3. Quit
+                break;
+            }
         }
-
-        a.examine();
-
+        System.out.println("See ya!");
     }
 }
